@@ -36,3 +36,25 @@ Please provide a 'schemaTrackingLocation' to enable non-additive schema evolutio
 See https://docs.delta.io/latest/versioning.html#column-mapping for more details.
 Read schema: {"type":"struct","fields":[{"name":"number","type":"integer","nullable":true,"metadata":{"delta.columnMapping.id":1,"delta.columnMapping.physicalName":"number"}},{"name":"letter","type":"string","nullable":true,"metadata":{"delta.columnMapping.id":2,"delta.columnMapping.physicalName":"letter"}}]}. Incompatible data schema: {"type":"struct","fields":[{"name":"id_number","type":"integer","nullable":true,"metadata":{"delta.columnMapping.id":1,"delta.columnMapping.physicalName":"number"}},{"name":"letter","type":"string","nullable":true,"metadata":{"delta.columnMapping.id":2,"delta.columnMapping.physicalName":"letter"}}]}.
 ```
+
+3. The problem doesn't happen for the _additive_ schema changes, i.e. when a new column is added. 
+That's what happens in the [DemoRunnerAddColumn.scala](DemoRunnerAddColumn.scala). 
+4. Run the `DemoRunnerAddColumn`. It should correctly process the table from the past version and 
+expose missing values for the new column:
+
+```
+Starting the streaming from the version 2
+-------------------------------------------
+Batch: 0
+-------------------------------------------
++------+------+---------+
+|number|letter|id_number|
++------+------+---------+
+|    50|   5-a|        3|
+|   100|   5-b|        3|
+|    20|   2-a|     NULL|
+|    40|   2-b|     NULL|
+|    30|   3-a|     NULL|
+|    60|   3-b|     NULL|
++------+------+---------+
+```
