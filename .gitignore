@@ -64,6 +64,8 @@ project/target
 *.class
 *.log
 
+.bsp/*
+
 spark-warehouse/
 work/
 src/test/resources/generated_file_1_gb.txt
